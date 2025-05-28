@@ -25,8 +25,9 @@ export const AutoDealerShip = () => {
     console.log(data)
     setFetchedData(data.data)
     } catch (error : unknown) {
-      const err = error as {message? : string}
-      setMsg({status : "error", content : err.message as string, bg : "bg-red-500"}) 
+      const err = error as {message? : string,  response? : any}
+      
+      setMsg({status : "error", content : err.response.data.message as string || err.message || "", bg : "bg-red-500"}) 
     }
     setIsLoading(false)
   }
