@@ -25,7 +25,7 @@ async function handleSubmit (_: any, formData: FormData) {
 
   try {
     const { data } = await axios.post(`${URL}/api/v1/admin/addCareerOpening`,{ title, description, location});
-    if(data.status === 200) setMsg({ status: "success", content: "Career opening created successfully", bg : "bg-green-500" })
+    setMsg({ status: "success", content: data.message || data.msg, bg : "bg-green-500" })
     return { success: true, message: "Career opening Created successfully" };
   } catch (error: unknown) {
     const err = error as { message?: string, response? : any };

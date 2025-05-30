@@ -23,14 +23,14 @@ export const Faq = () => {
     setIsLoading(true)
     try {
     const {data} = await axios.get(`${URL}/api/v1/faq/all`)
-    setFetchedData(data.data)
+    setFetchedData(data.data.docs || data.data)
     } catch (error : unknown) {
-      const err = error as {message? : string}
-      setMsg({status : "error", content : err.message as string, bg : "bg-red-500"}) 
+      const err = error as { message?: string, response? : any };
+     setMsg({status : "error", content : err.response.data.message as string || err.message || "", bg : "bg-red-500"}) 
     }
     setIsLoading(false)
   }
-  console.log(fetchedData)
+
   const handleOpenCreate = () => {
     setOpenCreate(true)
   }
@@ -53,14 +53,14 @@ const handleDeleteArticle = async(id : string) => {
   setSelectedId(id)
   try {
   const {data} = await axios.delete(`${URL}/api/v1/faq/delete/${id}`)
-  if(data.msg === "deleted") setMsg({status : "success", content : "Deleted Successfully.", bg : "bg-green-500"}) 
+     setFetchedData([...fetchedData.filter((item : any) => item._id !== id)])
+     setMsg({status : "success", content : data.message || data.msg, bg : "bg-green-500"}) 
   } catch (error : unknown) {
-    const err = error as {message? : string}
-    setMsg({status : "error", content : err.message as string, bg : "bg-red-500"}) 
+    const err = error as { message?: string, response? : any };
+    setMsg({status : "error", content : err.response.data.message as string || err.message || "", bg : "bg-red-500"}) 
   }
   setDeleteLoading(false)
   setSelectedId("")
-  setFetchedData([...fetchedData.filter((item : any) => item._id !== id)])
 }
 
    useEffect(() => {

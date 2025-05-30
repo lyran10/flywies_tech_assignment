@@ -68,14 +68,14 @@ export const EditCityStateCountry = ({id} : Props) => {
   }
 
   try {
-    await axios.put(`${URL}/api/v1/admin/cityStateCountry/cities/${id}`,{selectCity : city, state : stateId, country : countryId, type : "city"});
-    setMsg({ status: "success", content: "City Updated successfully", bg : "bg-green-500" })
+    const {data} = await axios.put(`${URL}/api/v1/admin/cityStateCountry/cities/${id}`,{selectCity : city, state : stateId, country : countryId, type : "city"});
+    setMsg({ status: "success", content: data.message || data.msg, bg : "bg-green-500" })
     setCity("")
     setCountryId("")
     setStateId("")
   } catch (error: unknown) {
-    const err = error as { message?: string };
-    setMsg({status : "error", content : err.message as string, bg : "bg-red-500"}) 
+    const err = error as { message?: string, response? : any };
+    setMsg({status : "error", content : err.response.data.message as string || err.message || "", bg : "bg-red-500"}) 
   }
    setIsLoading(false)
    
@@ -121,7 +121,7 @@ export const EditCityStateCountry = ({id} : Props) => {
             <Input tag="input" label='City' labelClasses='font-semibold' className='bg-slate-300' width='w-full' type="text" placeholder='Enter City' name="city" value={city} onChange={(e : React.ChangeEvent<HTMLInputElement>) => setCity(e.target.value)}>
               {!city && errors.city ? <span className='text-[13px] text-red-500'>{errors.city}</span> : null} 
             </Input>
-           <Button id="createButton" type={"submit"} className='py-1 px-2 w-auto text-white rounded-md bg-[rgba(48,169,185,1)]'>{isLoading ? "Creating..." : "Create"}</Button>
+           <Button id="editButton" type={"submit"} className='py-1 px-2 w-auto text-white rounded-md bg-[rgba(48,169,185,1)]'>{isLoading ? "Updating..." : "Update"}</Button>
         </form>
     </>
   )

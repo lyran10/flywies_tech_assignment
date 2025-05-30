@@ -14,6 +14,7 @@ export const EditArticle = ({id} : Props) => {
   const [FormData, setFormData] = useState<{title : string, description : string}>({title : "", description : ""})
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isLoading, setIsLoading] = useState(false)
+
   const handlechange = (e : React.ChangeEvent<HTMLInputElement>) => {
     setFormData({...FormData, [e.target.name] : e.target.value})
   }
@@ -37,10 +38,10 @@ export const EditArticle = ({id} : Props) => {
 
     try {
     const {data} = await axios.put(`${URL}/api/v1/admin/Article/updateArticle/${id}`, FormData)
-    if(data.status === 200) setMsg({status : "success", content : "Updated Successfully.", bg : "bg-green-500"}) 
+    setMsg({status : "success", content : data.message || data.msg, bg : "bg-green-500"}) 
     } catch (error : unknown) {
-      const err = error as {message? : string}
-      setMsg({status : "error", content : err.message as string, bg : "bg-red-500"}) 
+      const err = error as { message?: string, response? : any };
+      setMsg({status : "error", content : err.response.data.message as string || err.message || "", bg : "bg-red-500"}) 
     }
     setIsLoading(false)
   }

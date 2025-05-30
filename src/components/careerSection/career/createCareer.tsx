@@ -25,11 +25,11 @@ async function handleSubmit (_: any, formData: FormData) {
 
   try {
     const { data } = await axios.post(`${URL}/api/v1/admin/Career/addCareer`,formData);
-    if(data.status === 200) setMsg({ status: "success", content: "Career created successfully", bg : "bg-green-500" })
+    setMsg({ status: "success", content: data.message || data.msg, bg : "bg-green-500" })
     return { success: true, message: "Article Created successfully" };
   } catch (error: unknown) {
-    const err = error as { message?: string };
-    setMsg({status : "error", content : err.message as string, bg : "bg-red-500"}) 
+    const err = error as { message?: string, response? : any };
+    setMsg({status : "error", content : err.response.data.message as string || err.message || "", bg : "bg-red-500"}) 
     return { errors: { general: err.message || "Something went wrong" }, formData : { title, description, image} };
   }
 };

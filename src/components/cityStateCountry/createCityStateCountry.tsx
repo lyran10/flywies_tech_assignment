@@ -65,14 +65,14 @@ export const CreateCityStateCountry = () => {
   }
 
   try {
-    await axios.post(`${URL}/api/v1/admin/cityStateCountry/cities`,{selectCity : city, state : stateId, country : countryId, type : "city"});
-    setMsg({ status: "success", content: "City created successfully", bg : "bg-green-500" })
+    const {data} = await axios.post(`${URL}/api/v1/admin/cityStateCountry/cities`,{selectCity : city, state : stateId, country : countryId, type : "city"});
+    setMsg({ status: "success", content: data.message || data.msg, bg : "bg-green-500" })
     setCity("")
     setCountryId("")
     setStateId("")
   } catch (error: unknown) {
-    const err = error as { message?: string };
-    setMsg({status : "error", content : err.message as string, bg : "bg-red-500"}) 
+    const err = error as { message?: string, response? : any };
+    setMsg({status : "error", content : err.response.data.message as string || err.message || "", bg : "bg-red-500"}) 
   }
    setIsLoading(false)
    

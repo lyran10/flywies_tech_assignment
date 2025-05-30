@@ -25,12 +25,12 @@ async function handleSubmit (_: any, formData: FormData) {
   }
 
   try {
-    await axios.put(`${URL}/api/v1/faq/update/${id}`,{ question, answer } );
-    setMsg({ status: "success", content: "FAQ Updated successfully", bg : "bg-green-500" })
+    const {data} = await axios.put(`${URL}/api/v1/faq/update/${id}`,{ question, answer } );
+    setMsg({ status: "success", content: data.message || data.msg, bg : "bg-green-500" })
     return { success: true, message: "FAQ updated successfully" };
   } catch (error: unknown) {
-    const err = error as { message?: string };
-    setMsg({status : "error", content : err.message as string, bg : "bg-red-500"}) 
+    const err = error as { message?: string, response? : any };
+    setMsg({status : "error", content : err.response.data.message as string || err.message || "", bg : "bg-red-500"}) 
     return { errors: { general: err.message || "Something went wrong" }, formData : { answer, question} };
   }
 };

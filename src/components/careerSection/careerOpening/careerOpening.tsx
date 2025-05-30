@@ -37,8 +37,7 @@ export const CareerOpenings = () => {
     setIsLoading(true)
     try {
     const {data} = await axios.get(`${URL}/api/v1/admin/allCareerOpening?search=${search}&fromDate=&toDate=&page=${page}&limit=10`)
-    console.log(data)
-    setFetchedData(data.data.docs)
+    setFetchedData(data.data.docs || data.data)
     setDisable({next : data.data.hasNextPage ? false : true, prev : data.data.hasPrevPage ? false : true})
     setLimit({
     start: (page - 1) * 10 + 1,
@@ -46,8 +45,8 @@ export const CareerOpenings = () => {
   });
     setTotalDocs(data.data.totalDocs)
     } catch (error : unknown) {
-      const err = error as {message? : string}
-      setMsg({status : "error", content : err.message as string, bg : "bg-red-500"}) 
+     const err = error as { message?: string, response? : any };
+     setMsg({status : "error", content : err.response.data.message as string || err.message || "", bg : "bg-red-500"}) 
     }
     setIsLoading(false)
   }
@@ -73,15 +72,15 @@ const handleDeleteArticle = async(id : string) => {
   setDeleteLoading(true)
   setSelectedId(id)
   try {
-  const {data} = await axios.delete(`${URL}/api/v1/admin/deleteCareerOpening/${id}`)
-  if(data.msg === "deleted") setMsg({status : "success", content : "Deleted Successfully.", bg : "bg-green-500"}) 
+    const {data} = await axios.delete(`${URL}/api/v1/admin/deleteCareerOpening/${id}`)
+    setFetchedData([...fetchedData.filter((item : any) => item._id !== id)])
+    setMsg({status : "success", content : data.message || data.msg, bg : "bg-green-500"})  
   } catch (error : unknown) {
-    const err = error as {message? : string}
-    setMsg({status : "error", content : err.message as string, bg : "bg-red-500"}) 
+    const err = error as { message?: string, response? : any };
+    setMsg({status : "error", content : err.response.data.message as string || err.message || "", bg : "bg-red-500"}) 
   }
   setDeleteLoading(false)
   setSelectedId("")
-  setFetchedData([...fetchedData.filter((item : any) => item._id !== id)])
 }
 
    useEffect(() => {

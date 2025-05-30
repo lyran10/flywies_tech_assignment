@@ -17,7 +17,6 @@ type Props = {
 }
 
 export const TableContainer = ({header, prev, next, disable, limit, totalDocs, displayHeader ,displayBody, openCreateArticle} : Props) => {
-
   return (
     <section className='absolute w-[90%] h-[90%] self-center'>
       <div className='flex justify-between items-center'>

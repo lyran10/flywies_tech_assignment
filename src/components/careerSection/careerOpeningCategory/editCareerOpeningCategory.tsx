@@ -25,7 +25,7 @@ async function handleSubmit (_: any, formData: FormData) {
   }
 
   try {
-    await axios.put(`${URL}/api/v1/admin/CareerOpeningCategory/updateCareerOpeningCategory/${id}`,{title, type},
+    const {data} = await axios.put(`${URL}/api/v1/admin/CareerOpeningCategory/updateCareerOpeningCategory/${id}`,{title, type},
     {
     headers: {
       'Content-Type': 'application/json',
@@ -34,12 +34,11 @@ async function handleSubmit (_: any, formData: FormData) {
   }
      );
 
-    setMsg({ status: "success", content: "Career opening Category Updated successfully", bg : "bg-green-500" })
+    setMsg({ status: "success", content: data.message || data.msg, bg : "bg-green-500" })
     return { success: true, message: "Career opening Category Updated updated successfully" };
   } catch (error: unknown) {
-    const err = error as { message?: string };
-    console.log(error)
-    setMsg({status : "error", content : err.message as string, bg : "bg-red-500"}) 
+    const err = error as { message?: string, response? : any };
+    setMsg({status : "error", content : err.response.data.message as string || err.message || "", bg : "bg-red-500"}) 
     return { errors: { general: err.message || "Something went wrong" }, formData : { title, type} };
   }
 };

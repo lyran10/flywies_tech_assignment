@@ -22,7 +22,7 @@ export const Navbar = () => {
                        <Avatar className='w-4 h-4 text-[10px] bg-red-600 absolute bottom-4 -right-1 text-white font-semibold'>2</Avatar>
                        <Bell className='text-[rgba(72,128,255,1)]'/>
                     </div>
-                   <UserProfilePopup/>
+                   <UserProfilePopup/>s
                 </div>
                 
              </div>

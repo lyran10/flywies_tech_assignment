@@ -20,8 +20,6 @@ export const Table = ({displayHeader, displayBody} : Props) => {
     <tbody className='h-auto overflow-y-scroll'>
         {displayBody()}
     </tbody>
-
-    {/* TableHead and TableBody here */}
   </table>
 </div>
   )

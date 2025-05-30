@@ -22,11 +22,9 @@ export const AutoDealerShip = () => {
     setIsLoading(true)
     try {
     const {data} = await axios.get(`${URL}/api/v1/admin/AutoDealerShip/allAutoDealerShip`)
-    console.log(data)
-    setFetchedData(data.data)
+    setFetchedData(data.data.docs || data.data)
     } catch (error : unknown) {
       const err = error as {message? : string,  response? : any}
-      
       setMsg({status : "error", content : err.response.data.message as string || err.message || "", bg : "bg-red-500"}) 
     }
     setIsLoading(false)
